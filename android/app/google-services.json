@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "429967114040",
+    "project_id": "show-room-2025",
+    "storage_bucket": "show-room-2025.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:429967114040:android:58204737249dc2e9c14bcd",
+        "android_client_info": {
+          "package_name": "com.example.show_room"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH9T8hH8DmRdXXdv9_hTmF8jfesLqxRGk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
