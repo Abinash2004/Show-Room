@@ -99,7 +99,7 @@ class _ModifyStockScreenState extends State<ModifyStockScreen> {
 
               bool condition2 = (stockStatus != "Stock" && (salesDate == "Select a Date" || customerName.text.isEmpty));
 
-              bool condition3 = (stockStatus == "Sold" && (disAmount.text.isEmpty  || receivedAmount.text.isEmpty));
+              bool condition3 = (stockStatus == "Sold" && (receivedAmount.text.isEmpty));
 
               bool condition =  condition1 || condition2 || condition3;
 

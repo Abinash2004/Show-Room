@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
   Future<bool> updateCheck() async {
     final databaseRef = FirebaseDatabase.instance.ref();
     var databaseSnapshot = await databaseRef.child('Update Check').get();
-    return databaseSnapshot.child("Version").value.toString() == "1.0";
+    return databaseSnapshot.child("Version").value.toString() == "1.1";
   }
   
    @override
