@@ -14,7 +14,7 @@ class InvoiceScreen extends StatefulWidget {
 }
 
 class InvoiceScreenState extends State<InvoiceScreen> {
-  var serial = TextEditingController();
+  
   var invoiceNumber = TextEditingController();
   var invoiceDate = "Select a Date";
 
@@ -77,21 +77,6 @@ class InvoiceScreenState extends State<InvoiceScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                
-                SizedBox(height: 20),
-                stockTextField(serial, () async {
-                  setState(() {
-                    clearStockData();
-                  });
-                  if(serial.text.isEmpty) {
-                    snackbar("Serial Number is Required", context);
-                  }
-                  if(serial.text.isNotEmpty) {
-                    await getStockInvoice(serial, context);
-                    setState(() {});
-                  }
-                }),
-                SizedBox(height: 20),
 
                 inputContainer(Text("Customer Name : ${InvoiceScreen.customerName}",style: textStyle())),
                 SizedBox(height: 20),

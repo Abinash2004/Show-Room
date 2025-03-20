@@ -20,9 +20,7 @@ class SalesDetailScreen extends StatefulWidget {
   static var stockStatus = "";
   static var salesDate = "";
   static var paymentType = "";
-  static var disAmount = "";
   static var customerName = "";
-  static var downPayment = "";
   static var receivedAmount = "";
   
 
@@ -91,11 +89,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
             SizedBox(height: 10),
             inputContainer(Text("Payment Type : ${SalesDetailScreen.paymentType}",style: textStyle())),
             SizedBox(height: 10),
-            inputContainer(Text("Dis Amount : ${SalesDetailScreen.disAmount}",style: textStyle())),
-            SizedBox(height: 10),
             inputContainer(Text("Customer Name : ${SalesDetailScreen.customerName}",style: textStyle())),
-            SizedBox(height: 10),
-            inputContainer(Text("Down Payment : ${SalesDetailScreen.downPayment}",style: textStyle())),
             SizedBox(height: 10),
             inputContainer(Text("Received Amount : ${SalesDetailScreen.receivedAmount}",style: textStyle())),
             SizedBox(height: 10),

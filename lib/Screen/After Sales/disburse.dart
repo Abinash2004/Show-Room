@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:show_room/elements/functions.dart';
 import 'package:show_room/elements/widgets.dart';
 
-class VehicleNumberScreen extends StatefulWidget {
-  const VehicleNumberScreen({super.key});
+class DisburseScreen extends StatefulWidget {
+  const DisburseScreen({super.key});
 
   static var serial = "";
   static var customerName = "";
 
   @override
-  State<VehicleNumberScreen> createState() => _VehicleNumberScreenState();
+  State<DisburseScreen> createState() => _DisburseScreenState();
 }
 
-class _VehicleNumberScreenState extends State<VehicleNumberScreen> {
+class _DisburseScreenState extends State<DisburseScreen> {
   
-  var vehicleNumber = TextEditingController();
+  var disburse = TextEditingController();
   
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class _VehicleNumberScreenState extends State<VehicleNumberScreen> {
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(4.0),
           child: Container(color: Colors.white60,height: 0.25)),
-        title: Text("Add Vehicle Number", style: TextStyle(
+        title: Text("Add Disburse Amount", style: TextStyle(
           color: Colors.white60,
           fontSize: 25,
           fontWeight: FontWeight.w600
@@ -36,11 +36,11 @@ class _VehicleNumberScreenState extends State<VehicleNumberScreen> {
           IconButton(
             onPressed: () async {
 
-              if(vehicleNumber.text.isEmpty || VehicleNumberScreen.customerName.isEmpty) {
+              if(disburse.text.isEmpty || DisburseScreen.customerName.isEmpty) {
                 snackbar("Incomplete Data", context);
               }
               else {
-                await saveVehicleNumber(VehicleNumberScreen.serial, vehicleNumber, context);
+                await saveDisburseAmount(DisburseScreen.serial, disburse, context);
               }
             },
             icon: Icon(Icons.upload_rounded, color: Colors.white60, size: 30))
@@ -54,10 +54,10 @@ class _VehicleNumberScreenState extends State<VehicleNumberScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                inputContainer(Text("Customer Name : ${VehicleNumberScreen.customerName}",style: textStyle())),
+                inputContainer(Text("Customer Name : ${DisburseScreen.customerName}",style: textStyle())),
                 SizedBox(height: 20),
 
-                textField("Vehicle Number", vehicleNumber, false),
+                textField("Disburse Amount", disburse, true),
                 SizedBox(height: 20),
                 
               ],

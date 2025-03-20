@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:pinput/pinput.dart';
 import 'package:show_room/elements/functions.dart';
 import 'package:show_room/elements/widgets.dart';
-import 'package:show_room/main.dart';
 
 class ModifyStockScreen extends StatefulWidget {
   const ModifyStockScreen({super.key});
@@ -47,7 +46,6 @@ class _ModifyStockScreenState extends State<ModifyStockScreen> {
   String? stockStatus = "Stock";
   var salesDate = "Select a Date";
   String? paymentType = "Cash";
-  var disAmount = TextEditingController();
   var customerName = TextEditingController();
   var receivedAmount = TextEditingController();
 
@@ -111,7 +109,7 @@ class _ModifyStockScreenState extends State<ModifyStockScreen> {
                   saveStock(ModifyStockScreen.serial, stockDate, import, ModifyStockScreen.chassis, model, variant, color, exShowRoom, insurance, rto, hp, proPack, stockStatus,true, context);
                 } else {
                   
-                  saveSales(ModifyStockScreen.serial, stockDate, import, ModifyStockScreen.chassis, model, variant, color, exShowRoom, insurance, rto, hp, proPack, stockStatus, salesDate, paymentType, disAmount, customerName, receivedAmount, context);
+                  saveSales(ModifyStockScreen.serial, stockDate, import, ModifyStockScreen.chassis, model, variant, color, exShowRoom, insurance, rto, hp, proPack, stockStatus, salesDate, paymentType, customerName, receivedAmount, context);
                 }
               }
             },
@@ -151,7 +149,6 @@ class _ModifyStockScreenState extends State<ModifyStockScreen> {
                     stockStatus = ModifyStockScreen.stockStatus;
                     salesDate = ModifyStockScreen.salesDate;
                     paymentType = ModifyStockScreen.paymentType;
-                    disAmount.setText(ModifyStockScreen.disAmount);
                     customerName.setText(ModifyStockScreen.customerName);
                     receivedAmount.setText(ModifyStockScreen.receviedAmount);
 
@@ -229,7 +226,6 @@ class _ModifyStockScreenState extends State<ModifyStockScreen> {
                         if (stockStatus != "Sold") {
                           salesDate = "Select a Date";
                           paymentType = "Cash";
-                          disAmount.setText("");
                           receivedAmount.setText("");
                         } if (stockStatus == "Stock") {
                           customerName.setText("");
@@ -265,9 +261,6 @@ class _ModifyStockScreenState extends State<ModifyStockScreen> {
                   ],
                 )) : SizedBox(),
                 (stockStatus == "Sold") ? SizedBox(height: 20) : SizedBox(),
-                
-                (stockStatus == "Sold" && MyApp.user == "Admin") ? textField("Dis Amount", disAmount, true) : SizedBox(),
-                (stockStatus == "Sold" && MyApp.user == "Admin") ? SizedBox(height: 20) : SizedBox(),
 
                 (stockStatus != "Stock") ? textField("Customer Name", customerName, false) : SizedBox(),
                 (stockStatus != "Stock") ? SizedBox(height: 20) : SizedBox(),

@@ -20,6 +20,7 @@ class _ViewSalesScreenState extends State<ViewSalesScreen> {
   @override
   Widget build(BuildContext context) {
     
+    var screen = MediaQuery.sizeOf(context);
     final databaseRef = FirebaseDatabase.instance.ref("Database").child(MyApp.location).child('Stock');
     
     return Scaffold(
@@ -116,12 +117,12 @@ class _ViewSalesScreenState extends State<ViewSalesScreen> {
                             SalesDetailScreen.stockStatus = list[index]['Stock Status'];
                             SalesDetailScreen.salesDate = list[index]['Sales Date'];
                             SalesDetailScreen.paymentType = list[index]['Payment Type'];
-                            SalesDetailScreen.disAmount = list[index]['Dis Amount'];
                             SalesDetailScreen.customerName = list[index]['Customer Name'];
-                            SalesDetailScreen.downPayment = list[index]['Down Payment'];
                             SalesDetailScreen.receivedAmount = list[index]['Received Amount'];
                             Navigator.push(context,MaterialPageRoute(builder: (context) => const SalesDetailScreen()));
                           },
+
+                          onLongPress: () => salesModalBottomBar(list[index]["Stock Status"], list[index]["Serial Number"], list[index]["Customer Name"], screen, context),
                         ),
                       // ignore: dead_code
                       ) : const SizedBox();

@@ -128,19 +128,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 
                 SizedBox(height: screen.height * 0.03),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    homeContainer("Invoice",screen,screen.width * 0.45, customerColor,context),
-
-                    SizedBox(width: screen.width * 0.05),
-                    
-                    homeContainer("Vehicle Number",screen,screen.width * 0.45, customerColor,context),    
-                  ],
-                ),
-
-                SizedBox(height: screen.height * 0.03),
-
                 homeContainer("Expense",screen,screen.width * 0.95, dueColor,context),
                 
                 SizedBox(height: screen.height * 0.03),

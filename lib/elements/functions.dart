@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:show_room/Screen/After%20Sales/disburse.dart';
 import 'package:show_room/Screen/After%20Sales/invoice.dart';
 import 'package:show_room/Screen/After%20Sales/vehicle_number.dart';
 import 'package:show_room/Screen/Customer/add_customer.dart';
@@ -153,15 +154,13 @@ Future<void> saveStock(var serial, var date, var import, var chassis, var model 
   });
 }
 
-Future<void> saveSales(var serial, var stockDate, var import, var chassis, var model , var variant , var color, var exShowRoom, var insurance, var rto, var hp, var proPack,var stockStatus,var salesDate,  var paymentType, var disAmount, var customerName, var receivedAmount, var context ) async {
+Future<void> saveSales(var serial, var stockDate, var import, var chassis, var model , var variant , var color, var exShowRoom, var insurance, var rto, var hp, var proPack,var stockStatus,var salesDate,  var paymentType, var customerName, var receivedAmount, var context ) async {
 
    int total = (int.tryParse(exShowRoom.text) ?? 0) + 
               (int.tryParse(insurance.text) ?? 0) + 
               (int.tryParse(rto.text) ?? 0) + 
               (int.tryParse(hp.text) ?? 0) + 
               (int.tryParse(proPack.text) ?? 0);
-    
-    String downPayment = (stockStatus == "Sold") ? (total - int.parse(disAmount.text)).toString() : "";
   
   final databaseRef = FirebaseDatabase.instance.ref();
   databaseRef.child("Database").child(MyApp.location).child('Stock').child((serial == "1") ? "01" : serial.toString()).set({
@@ -181,9 +180,7 @@ Future<void> saveSales(var serial, var stockDate, var import, var chassis, var m
     'Total Amount': total.toString(),
     'Sales Date': salesDate,
     'Payment Type' : paymentType,
-    'Dis Amount' : disAmount.text,
     'Customer Name' : customerName.text,
-    'Down Payment' : downPayment,
     'Received Amount' : receivedAmount.text
   }).then((value) async {
     Navigator.pop(context);
@@ -270,10 +267,10 @@ Future<void> createStockExcel() async {
   sheet.getRangeByName("N1").setText("STOCK STATUS");
   sheet.getRangeByName("O1").setText("SALES DATE");
   sheet.getRangeByName("P1").setText("PAYMENT TYPE");
-  sheet.getRangeByName("Q1").setText("DIS AMOUNT");
-  sheet.getRangeByName("R1").setText("CUSTOMER NAME");
-  sheet.getRangeByName("S1").setText("DOWN PAYMENT");
-  sheet.getRangeByName("T1").setText("RECEIVED AMOUNT");
+  sheet.getRangeByName("Q1").setText("CUSTOMER NAME");
+  sheet.getRangeByName("R1").setText("RECEIVED AMOUNT");
+  sheet.getRangeByName("S1").setText("DIS AMOUNT");
+  sheet.getRangeByName("T1").setText("DOWN PAYMENT");
   sheet.getRangeByName("U1").setText("INVOICE NUMBER");
   sheet.getRangeByName("V1").setText("INVOICE DATE");
   sheet.getRangeByName("W1").setText("VEHICLE NUMBER");
@@ -297,10 +294,13 @@ Future<void> createStockExcel() async {
     if(HomeScreen.stockList[i]["Stock Status"].toString() != "Stock") {
       sheet.getRangeByName("O${i+3}").setText(HomeScreen.stockList[i]["Sales Date"].toString().toUpperCase());
       sheet.getRangeByName("P${i+3}").setText(HomeScreen.stockList[i]["Payment Type"].toString().toUpperCase());
-      sheet.getRangeByName("Q${i+3}").setText(HomeScreen.stockList[i]["Dis Amount"].toString().toUpperCase());
-      sheet.getRangeByName("R${i+3}").setText(HomeScreen.stockList[i]["Customer Name"].toString().toUpperCase());
-      sheet.getRangeByName("S${i+3}").setText(HomeScreen.stockList[i]["Down Payment"].toString().toUpperCase());
-      sheet.getRangeByName("T${i+3}").setText(HomeScreen.stockList[i]["Received Amount"].toString().toUpperCase());
+      sheet.getRangeByName("Q${i+3}").setText(HomeScreen.stockList[i]["Customer Name"].toString().toUpperCase());
+      sheet.getRangeByName("R${i+3}").setText(HomeScreen.stockList[i]["Received Amount"].toString().toUpperCase());
+    }
+
+    if(HomeScreen.stockList[i]["Disburse Amount"].toString() != "null") {
+      sheet.getRangeByName("S${i+3}").setText(HomeScreen.stockList[i]["Disburse Amount"].toString().toUpperCase());
+      sheet.getRangeByName("T${i+3}").setText(HomeScreen.stockList[i]["Down Payment"].toString().toUpperCase());
     }
 
     if(HomeScreen.stockList[i]["Stock Status"] == "Returned") {
@@ -353,10 +353,8 @@ Future<void> createViewSalesExcel() async {
   sheet.getRangeByName("N1").setText("STOCK STATUS");
   sheet.getRangeByName("O1").setText("SALES DATE");
   sheet.getRangeByName("P1").setText("PAYMENT TYPE");
-  sheet.getRangeByName("Q1").setText("DIS AMOUNT");
-  sheet.getRangeByName("R1").setText("CUSTOMER NAME");
-  sheet.getRangeByName("S1").setText("DOWN PAYMENT");
-  sheet.getRangeByName("T1").setText("RECEIVED AMOUNT");
+  sheet.getRangeByName("Q1").setText("CUSTOMER NAME");
+  sheet.getRangeByName("R1").setText("RECEIVED AMOUNT");
   int x = 0;
   for (int i=0; i<HomeScreen.stockList.length; i++) {
     if(HomeScreen.stockList[i]["Stock Status"].toString() != "Stock") {
@@ -376,10 +374,8 @@ Future<void> createViewSalesExcel() async {
       sheet.getRangeByName("N${x+3}").setText(HomeScreen.stockList[i]["Stock Status"].toString().toUpperCase());
       sheet.getRangeByName("O${x+3}").setText(HomeScreen.stockList[i]["Sales Date"].toString().toUpperCase());
       sheet.getRangeByName("P${x+3}").setText(HomeScreen.stockList[i]["Payment Type"].toString().toUpperCase());
-      sheet.getRangeByName("Q${x+3}").setText(HomeScreen.stockList[i]["Dis Amount"].toString().toUpperCase());
-      sheet.getRangeByName("R${x+3}").setText(HomeScreen.stockList[i]["Customer Name"].toString().toUpperCase());
-      sheet.getRangeByName("S${x+3}").setText(HomeScreen.stockList[i]["Down Payment"].toString().toUpperCase());
-      sheet.getRangeByName("T${x+3}").setText(HomeScreen.stockList[i]["Received Amount"].toString().toUpperCase());
+      sheet.getRangeByName("Q${x+3}").setText(HomeScreen.stockList[i]["Customer Name"].toString().toUpperCase());
+      sheet.getRangeByName("R${x+3}").setText(HomeScreen.stockList[i]["Received Amount"].toString().toUpperCase());
       
       if(HomeScreen.stockList[i]["Stock Status"] == "Returned") {
         sheet.getRangeByName("N${x+3}").cellStyle.backColor = red;
@@ -452,28 +448,6 @@ Future<void> createViewStockExcel() async {
   OpenFile.open(fileName);
 }
 
-Future<void> getStockInvoice(var stockSerial, context) async {
-  final databaseRef = FirebaseDatabase.instance.ref();
-  var databaseSnapshot = await databaseRef.child("Database").child(MyApp.location).child('Stock').child((stockSerial.text.toString() == "1") ? "01" : stockSerial.text.toString().toUpperCase()).get(); 
-  if(databaseSnapshot.value != null) {
-    if(databaseSnapshot.child("Invoice Number").value.toString() != "null") {
-      snackbar("Invoic already added", context);
-    } else if(databaseSnapshot.child("Stock Status").value.toString() == "Sold") {
-        InvoiceScreen.customerName = databaseSnapshot.child("Customer Name").value.toString();
-        VehicleNumberScreen.customerName = databaseSnapshot.child("Customer Name").value.toString();
-        InvoiceScreen.serial = databaseSnapshot.child("Serial Number").value.toString();
-    } else if(databaseSnapshot.child("Stock Status").value.toString() == "Stock") {
-      snackbar("Stock Not Sold", context);
-    } else if(databaseSnapshot.child("Stock Status").value.toString() == "Returned") {
-      snackbar("Stock Returned", context);
-      
-    }
-  } else {
-    snackbar("Stock Not Found", context);
-  }
-
-}
-
 Future<void> saveInvoice(var serial, var invoiceNumber, var invoiceDate, var context ) async {
   
   final databaseRef = FirebaseDatabase.instance.ref();
@@ -536,29 +510,6 @@ Future<void> saveInvoice(var serial, var invoiceNumber, var invoiceDate, var con
    }
 }
 
-Future<void> getStockVehicle(var stockSerial, context) async {
-  final databaseRef = FirebaseDatabase.instance.ref();
-  var databaseSnapshot = await databaseRef.child("Database").child(MyApp.location).child('Stock').child((stockSerial.text.toString() == "1") ? "01" : stockSerial.text.toString().toUpperCase()).get(); 
-  if(databaseSnapshot.value != null) {
-    if(databaseSnapshot.child("Vehicle Number").value.toString() != "null") {
-      snackbar("Vehicle Number Exists", context);
-    } else if(databaseSnapshot.child("Invoice Number").value.toString() == "null") {
-      snackbar("Invoice Pending", context);
-    } else if(databaseSnapshot.child("Stock Status").value.toString() == "Sold") {
-        VehicleNumberScreen.customerName = databaseSnapshot.child("Customer Name").value.toString();
-        VehicleNumberScreen.serial = databaseSnapshot.child("Serial Number").value.toString();
-    } else if(databaseSnapshot.child("Stock Status").value.toString() == "Stock") {
-      snackbar("Stock Not Sold", context);
-    } else if(databaseSnapshot.child("Stock Status").value.toString() == "Returned") {
-      snackbar("Stock Returned", context);
-      
-    }
-  } else {
-    snackbar("Stock Not Found", context);
-  }
-
-}
-
 Future<void> saveVehicleNumber(var serial,var vehicleNumber, var context ) async {
   
   final databaseRef = FirebaseDatabase.instance.ref();
@@ -617,6 +568,64 @@ Future<void> saveVehicleNumber(var serial,var vehicleNumber, var context ) async
       }).then((value) async {
         Navigator.pop(context);
         snackbar("Vehicle Number Added", context);
+      });
+    }
+   }
+}
+
+Future<void> saveDisburseAmount(var serial,var disburse, var context ) async {
+  
+  final databaseRef = FirebaseDatabase.instance.ref();
+  var databaseSnapshot = await databaseRef.child("Database").child(MyApp.location).child('Stock').child((serial == "1") ? "01" : serial.toString()).get(); 
+  
+  if(databaseSnapshot.value != null) {
+    if(databaseSnapshot.child("Stock Status").value.toString() == "Sold") {
+
+      var serialNumber = databaseSnapshot.child("Serial Number").value.toString();
+      var stockDate = databaseSnapshot.child("Stock Date").value.toString();
+      var import = databaseSnapshot.child("Import Method").value.toString();
+      var chassis = databaseSnapshot.child("Chassis Number").value.toString();
+      var model = databaseSnapshot.child("Model Name").value.toString();
+      var variant = databaseSnapshot.child("Variant Name").value.toString();
+      var color = databaseSnapshot.child("Model Color").value.toString();
+      var exShowRoom = databaseSnapshot.child("Ex-Showroom Amount").value.toString();
+      var insurance = databaseSnapshot.child("Insurance Amount").value.toString();
+      var rto = databaseSnapshot.child("RTO Amount").value.toString();
+      var hp = databaseSnapshot.child("HP Amount").value.toString();
+      var proPack = databaseSnapshot.child("Pro Pack Amount").value.toString();
+      var total = databaseSnapshot.child("Total Amount").value.toString();
+      var stockStatus = databaseSnapshot.child("Stock Status").value.toString();
+      var salesDate = databaseSnapshot.child("Sales Date").value.toString();
+      var paymentType = databaseSnapshot.child("Payment Type").value.toString();
+      var customerName = databaseSnapshot.child("Customer Name").value.toString();
+      var receivedAmount = databaseSnapshot.child("Received Amount").value.toString();
+    
+      String downPayment = (int.parse(total) - int.parse(disburse.text)).toString();
+
+      databaseRef.child("Database").child(MyApp.location).child('Stock').child((serial == "1") ? "01" : serial.toString()).set({
+        'Serial Number': serialNumber,
+        'Stock Date': stockDate,
+        'Import Method': import,
+        'Chassis Number': chassis.toString().toUpperCase(),
+        'Model Name': model,
+        'Variant Name': variant,
+        'Model Color': color,
+        'Ex-Showroom Amount': exShowRoom,
+        'Insurance Amount': insurance,
+        'RTO Amount': rto,
+        'HP Amount': hp,
+        'Pro Pack Amount': proPack,
+        'Stock Status': stockStatus,
+        'Total Amount': total,
+        'Sales Date': salesDate,
+        'Payment Type' : paymentType,
+        'Disburse Amount' : disburse.text.toString(),
+        'Customer Name' : customerName,
+        'Down Payment' : downPayment,
+        'Received Amount' : receivedAmount,
+      }).then((value) async {
+        Navigator.pop(context);
+        snackbar("Disburse Amount Added", context);
       });
     }
    }
@@ -1170,4 +1179,51 @@ Future<void> depositUpdate(var serial ,String approval) async {
     'Status' : approval
   });
     
+}
+
+void salesModalBottomBarLogic(String task, String stockStatus, String serial, String customer, var context) {
+  
+  if(task == "invoice") {
+    
+    if(stockStatus == "Returned") {
+      Navigator.pop(context);
+      snackbar("Stock is Returned", context);
+    } else {
+      InvoiceScreen.serial = serial;
+      InvoiceScreen.customerName = customer;
+      Navigator.pop(context);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => InvoiceScreen()));
+    }
+
+  } else if(task == "disburse") {
+    
+    if(stockStatus == "Returned") {
+      Navigator.pop(context);
+      snackbar("Stock is Returned", context);
+    } else {
+      DisburseScreen.serial = serial;
+      DisburseScreen.customerName = customer;
+      Navigator.pop(context);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => DisburseScreen()));
+    }
+
+  } else if(task == "vehicle") {
+
+    if(stockStatus == "Returned") {
+      Navigator.pop(context);
+      snackbar("Stock is Returned", context);
+    } else {
+      if(stockStatus == "Returned") {
+        Navigator.pop(context);
+        snackbar("Stock is Returned", context);
+      } else {
+        VehicleNumberScreen.serial = serial;
+        VehicleNumberScreen.customerName = customer;
+        Navigator.pop(context);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => VehicleNumberScreen()));
+      }
+    }
+
+  }
+
 }

@@ -2,8 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
-import 'package:show_room/Screen/After%20Sales/invoice.dart';
-import 'package:show_room/Screen/After%20Sales/vehicle_number.dart';
 import 'package:show_room/Screen/Customer/add_customer.dart';
 import 'package:show_room/Screen/Customer/view_customer.dart';
 import 'package:show_room/Screen/Due/add_due.dart';
@@ -19,6 +17,7 @@ import 'package:show_room/Screen/Stock/add_stock.dart';
 import 'package:show_room/Screen/Stock/modify_stock.dart';
 import 'package:show_room/Screen/Stock/view_stock.dart';
 import 'package:show_room/elements/functions.dart';
+import 'package:show_room/main.dart';
 
 // --------------------------Global Widgets-----------------------------
 
@@ -140,18 +139,10 @@ Widget homeContainer(var title, var screen, var size, var color, var context) {
           Navigator.push(context,MaterialPageRoute(builder: (context) => const ViewStockScreen()));
         } else if(title == "Sales") {
           Navigator.push(context,MaterialPageRoute(builder: (context) => const ViewSalesScreen()));
-        } else if(title == "Modify Stock") {
-          Navigator.push(context,MaterialPageRoute(builder: (context) => const ModifyStockScreen()));
         } else if(title == "Follow Up") {
           Navigator.push(context,MaterialPageRoute(builder: (context) => const ViewCustomerScreen()));
         } else if(title == "Due") {
           Navigator.push(context,MaterialPageRoute(builder: (context) => const ViewDueScreen()));
-        } else if(title == "Invoice") {
-          clearStockData();
-          Navigator.push(context,MaterialPageRoute(builder: (context) => const InvoiceScreen()));
-        } else if(title == "Vehicle Number") {
-          clearStockData();
-          Navigator.push(context,MaterialPageRoute(builder: (context) => const VehicleNumberScreen()));
         } else if(title == "Deposit") {
           Navigator.push(context,MaterialPageRoute(builder: (context) => const ViewDepositScreen()));
         } else if(title == "Receive") {
@@ -390,5 +381,52 @@ Widget stockTextField(var controller, var fun) {
       focusedErrorBorder: defaultBorder,
       focusedBorder: defaultBorder,
     ), 
+  );
+}
+
+void salesModalBottomBar(String stockStatus, String serial, String customer, var screen, var context) {
+  showModalBottomSheet(
+    context: context,
+    backgroundColor: accentColor,
+    builder: (BuildContext context) {
+      return Container(
+        width: double.infinity,
+        height: screen.height * 0.15,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          )),
+          child: Padding(
+            padding: const EdgeInsets.only( top: 15),
+            child: Row(
+              mainAxisAlignment:MainAxisAlignment.spaceEvenly,
+              children: [
+  
+                Column(
+                  children: [
+                    IconButton(onPressed: () => salesModalBottomBarLogic("invoice",stockStatus, serial, customer, context), icon: Icon(Icons.description_rounded, color: Colors.white54,size: 30,)),
+                    TextButton(onPressed: () => salesModalBottomBarLogic("invoice",stockStatus, serial, customer, context), child: Text("Add\nInvoice", textAlign: TextAlign.center, style: TextStyle(color: Colors.white54)))
+                  ]
+                ),
+                
+                (MyApp.user == "Admin") ? Column(
+                  children: [
+                    IconButton(onPressed: () => salesModalBottomBarLogic("disburse",stockStatus, serial, customer, context), icon: Icon(Icons.currency_rupee_rounded, color: Colors.white54,size: 30,)),
+                    TextButton(onPressed: () => salesModalBottomBarLogic("disburse",stockStatus, serial, customer, context), child: Text("Disburse\nAmount", textAlign: TextAlign.center, style: TextStyle(color: Colors.white54)))
+                  ],
+                ): SizedBox(),
+                
+                Column(
+                  children: [
+                    IconButton(onPressed: () => salesModalBottomBarLogic("vehicle",stockStatus, serial, customer, context), icon: Icon(Icons.directions_bike_rounded, color: Colors.white54,size: 30,)),
+                    TextButton(onPressed: () => salesModalBottomBarLogic("vehicle",stockStatus, serial, customer, context), child: Text("Vehicle\nNumber", textAlign: TextAlign.center, style: TextStyle(color: Colors.white54)))
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+    }
   );
 }
